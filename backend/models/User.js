@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import bcrypt from 'bcryptjs';
 
-const STARTING_CREDIT =20;
+const STARTING_CREDITS =20;
 const userSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     },
     credits:{
         type:Number,
-        default: STARTING_CREDIT,
+        default: STARTING_CREDITS,
         min:0,
     },
     emailVerified:{
@@ -51,3 +51,16 @@ userSchema.methods.toClient = function(){ //this function says take the user fro
 }   //here toClient() means Security fiber (no password sent) : safe user sent to frontend means: expect password all the things
 
 
+//password hash:
+userSchema.statics.hashPassword = function(plain){
+    return bcrypt.hash(plain,10);
+};
+
+// verify hash password with the user password:
+userSchema.methods.verifyPassword = function(plain){
+    return bcrypt.compare(plain, this.passwordHash);
+};
+
+userSchema.statics.STARTING_CREDITS = STARTING_CREDITS;
+
+export const User = mongoose.model("User", userSchema);
