@@ -1,0 +1,53 @@
+<svg width="640" height="180" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6D5CFF"/>
+      <stop offset="55%" stop-color="#4C7DFF"/>
+      <stop offset="100%" stop-color="#22C7C0"/>
+    </linearGradient>
+    <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD166"/>
+      <stop offset="100%" stop-color="#FF8A5B"/>
+    </linearGradient>
+    <linearGradient id="textAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4C7DFF"/>
+      <stop offset="100%" stop-color="#22C7C0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon mark: anvil/forge silhouette fused with a code bracket, symbolizing "forging" websites with AI -->
+  <g transform="translate(20, 20)">
+    <rect x="0" y="0" width="140" height="140" rx="32" fill="url(#markGrad)"/>
+
+    <!-- code bracket / anvil body -->
+    <path d="M42 40
+             L34 70
+             L42 100
+             M98 40
+             L106 70
+             L98 100"
+          fill="none" stroke="#FFFFFF" stroke-width="9"
+          stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+
+    <!-- anvil base bar, representing the "forge" -->
+    <rect x="46" y="96" width="48" height="10" rx="5" fill="#FFFFFF" opacity="0.95"/>
+
+    <!-- AI spark -->
+    <path d="M100 26
+             L106 40
+             L120 46
+             L106 52
+             L100 66
+             L94 52
+             L80 46
+             L94 40 Z"
+          fill="url(#sparkGrad)"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(190, 0)" font-family="Helvetica, Arial, sans-serif">
+    <text x="0" y="100" font-size="56" font-weight="700" fill="#1B2430" letter-spacing="0.5">Site<tspan fill="#1B2430">Forge</tspan></text>
+    <text x="257" y="100" font-size="56" font-weight="700" fill="url(#textAccent)">-AI</text>
+    <text x="2" y="128" font-size="17" font-weight="500" fill="#6B7686" letter-spacing="3.5">AI-POWERED WEBSITE BUILDER</text>
+  </g>
+</svg>

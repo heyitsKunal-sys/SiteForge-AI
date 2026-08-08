@@ -1,0 +1,36 @@
+<svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="markGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6D5CFF"/>
+      <stop offset="55%" stop-color="#4C7DFF"/>
+      <stop offset="100%" stop-color="#22C7C0"/>
+    </linearGradient>
+    <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD166"/>
+      <stop offset="100%" stop-color="#FF8A5B"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="10" y="10" width="140" height="140" rx="32" fill="url(#markGrad)"/>
+
+  <path d="M52 50
+           L44 80
+           L52 110
+           M108 50
+           L116 80
+           L108 110"
+        fill="none" stroke="#FFFFFF" stroke-width="9"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+
+  <rect x="56" y="106" width="48" height="10" rx="5" fill="#FFFFFF" opacity="0.95"/>
+
+  <path d="M110 36
+           L116 50
+           L130 56
+           L116 62
+           L110 76
+           L104 62
+           L90 56
+           L104 50 Z"
+        fill="url(#sparkGrad)"/>
+</svg>
