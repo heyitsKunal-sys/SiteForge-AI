@@ -50,7 +50,7 @@ export async function register(req, res, next) {
 
 
     }
-    catch (error) {
+    catch (err) {
         next(err);
 
     }
@@ -77,7 +77,7 @@ export async function verifyRegister(req, res, next) {
         await user.save();
         res.josn({ ok: true });
 
-    } catch (error) {
+    } catch (err) {
         next(err);
     }
 
@@ -98,7 +98,7 @@ export async function resendRegister(req, res, next) {
             return res.status(400).json({ error: "this email is already Verified- just sign up" });
 
         return issueAndSend(user.email, user.name, "signup", res, 200)
-    } catch (error) {
+    } catch (err) {
         next(err)
     }
 }
@@ -128,7 +128,7 @@ export async function login(req, res, next) {
             res.json({ token, user: user.toClient() }); //get suer details excluding the password
 
         }
-    } catch (error) {
+    } catch (err) {
         next(err);
     }
 
@@ -169,7 +169,7 @@ export async function contributions(req, res, next) {
         const total = days.reduce((s, d) => s + d.count, 0);
         res.json({ days, total, from: key(oneYearAgo), to: key(new Date()) });
 
-    } catch (error) {
+    } catch (err) {
         next(err);
     }
 }
@@ -187,7 +187,7 @@ export async function updateProfile(req, res, next) {
         req.user.name = name;
         await req.user.save();
         res.json({ user: req.user.toClient() });
-    } catch (error) {
+    } catch (err) {
         next(err);
     }
 }
@@ -208,7 +208,7 @@ export async function changePassword(req, res, next) {
         res.json({ ok: true });
 
 
-    } catch (error) {
+    } catch (err) {
         next(err)
     }
 }
@@ -220,7 +220,7 @@ export async function deleteAccount(req, res, next) {
         await Project.deleteMany({ user: req.user._id });
         await req.user.deleteOne();
         res.json({ ok: true });
-    } catch (error) {
+    } catch (err) {
         next(err);
     }
 }
