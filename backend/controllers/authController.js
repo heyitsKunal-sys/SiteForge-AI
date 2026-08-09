@@ -1,6 +1,6 @@
 import { User } from "../models/User.js";
 import { Project } from "../models/Project.js";
-import { generateOtp, saveOtp, sendOtpEmail } from '../utils/services.js';
+import { generateOtp, saveOtp, sendOtpEmail, verifyOtp } from '../utils/services.js';
 
 
 // issue an otp and sent it to the email:
@@ -55,4 +55,32 @@ export async function register(req, res, next) {
     }
 }
 
-// verified the opt and make user verified:
+// verify the opt and make user verified:
+export async function verifyRegister(req, res, next) {
+    try {
+        const { email, code } = req.body;
+        if (!email || !code)
+            return res.status(400).json({ error: "email and code is not verified" })
+
+        const user = await User.findOne({ email });
+        if (!user)
+            return res.status(404).json({ error: "no account found with email" });
+
+        if (user.emailVerified)
+            return res.json({ ok: true, alreadyVerified: true });
+
+        const result = verifyOtp(email, code);
+        if (!result.ok) return res.status(400).json({ error: result.reason });
+
+        user.emailVerified = true;
+        await user.save();
+        res.josn({ ok: true });
+
+    } catch (error) {
+        next(err);
+    }
+
+}
+
+// to resend the otp or if user register but forgots to verify
+// we can re-verify 

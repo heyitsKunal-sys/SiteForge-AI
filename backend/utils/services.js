@@ -470,6 +470,7 @@ export function verifyOtp(email, code) {
   if (!record) {
     return { ok: false, reason: "No code requested. Request a new one." };
   }
+  // otp valid for 10min else expire
   if (Date.now() > record.expiresAt) {
     otpStore.delete(email);
     return { ok: false, reason: "Code expired. Request a new one." };
