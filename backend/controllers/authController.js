@@ -1,6 +1,7 @@
 import { User } from "../models/User.js";
 import { Project } from "../models/Project.js";
 import { generateOtp, saveOtp, sendOtpEmail, verifyOtp } from '../utils/services.js';
+import { signToken } from "../middleware/auth.js";
 
 
 // issue an otp and sent it to the email:
@@ -84,3 +85,142 @@ export async function verifyRegister(req, res, next) {
 
 // to resend the otp or if user register but forgots to verify
 // we can re-verify 
+
+export async function resendRegister(req, res, next) {
+    try {
+        const email = (req.body.email || "").trim().toLowerCase();
+        if (!email) return res.stauts(400).json({ error: " email is required." });
+
+        const user = await User.findOne({ email }); //find user using email
+        if (!user)
+            return res.status(404).json({ error: " No account found." });
+        if (user.emailVerified)
+            return res.status(400).json({ error: "this email is already Verified- just sign up" });
+
+        return issueAndSend(user.email, user.name, "signup", res, 200)
+    } catch (error) {
+        next(err)
+    }
+}
+
+
+//  to login
+
+export async function login(req, res, next) {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password)
+            return res.status(400).json({ error: "Email and Password are required" });
+        const user = await User.findOne({ email }); //find user using email
+        if (!user)
+            return res.status(401).json({ error: " Invalid Credentials." });
+        const ok = await user.verifyPassword(password);
+        if (!ok) return res.status(401).json({ error: "Invalid Credentials" });
+
+        if (!user.emailVerified) {
+            return res.status(403).json({
+                error: 'Please verify your email. Check inbox for the 6 digit code',
+                needsVerification: true,
+                email: user.email
+            });
+            // to generate token
+            const token = signToken(user._id.toString());
+            res.json({ token, user: user.toClient() }); //get suer details excluding the password
+
+        }
+    } catch (error) {
+        next(err);
+    }
+
+}
+
+// to get logged-in user profile
+export function me(req, res) {
+    res.json({ user: req.user.toClient() })
+};
+
+// to get contribution count like github graph:
+export async function contributions(req, res, next) {
+    try {
+        const oneYearAgo = new Date();
+        oneYearAgo.setUTCHours(0, 0, 0, 0);
+        oneYearAgo.setUTCDate(oneYearAgo.getUTCDate() - 364);
+
+        const projects = await Project.file({
+            user: req.user._id,
+            "messages.createdAt": { $gte: oneYearAgo },
+        }).select("messages")
+
+        const counts = {};
+        const key = (d) => new Date(d).toISOString().slice(0, 10);
+        for (const p of projects) {
+            for (const m of p.messages || []) {
+                if (m.role === "user" && m.createdAt && m.createdAt >= oneYearAgo) {
+                    const k = key(m.createdAt);
+                    counts[k] = (counts[k] || 0) + 1;
+                }
+            }
+        }
+
+        const days = Object.entries(counts)
+            .map(([date, count]) => ({ date, count }))
+            .sort((a, b) => a.date.localeCompare(b.date));
+
+        const total = days.reduce((s, d) => s + d.count, 0);
+        res.json({ days, total, from: key(oneYearAgo), to: key(new Date()) });
+
+    } catch (error) {
+        next(err);
+    }
+}
+
+// to udpate profile
+export async function updateProfile(req, res, next) {
+    try {
+        const name = req.body.name !== undefined ? String(req.body.name).trim() : undefined;
+        if (name === undefined)
+            return res.status(400).json({ error: "Nothing is update" });
+
+        if (name.length < 2 || name.length > 32)
+            return res.status(400).json({ error: "name must be of 2-32 characters." });
+
+        req.user.name = name;
+        await req.user.save();
+        res.json({ user: req.user.toClient() });
+    } catch (error) {
+        next(err);
+    }
+}
+
+// to change the current password for the logged-in user
+export async function changePassword(req, res, next) {
+    try {
+        const { current, nextPw } = req.body;
+        if (!current || nextPw.length < 6)
+            return res.status(400).json({ error: "New Password must be atleast 6 charcter" });
+
+        const ok = await req.user.verifyPassword(current);
+        if (!ok)
+            return res.status(400).json({ error: "Current password is incorrect" });
+
+        req.user.passwordHash = await User.hashPassword(nextPw);
+        await req.user.save();
+        res.json({ ok: true });
+
+
+    } catch (error) {
+        next(err)
+    }
+}
+
+
+// to remove the logged-in user's acccout
+export async function deleteAccount(req, res, next) {
+    try {
+        await Project.deleteMany({ user: req.user._id });
+        await req.user.deleteOne();
+        res.json({ ok: true });
+    } catch (error) {
+        next(err);
+    }
+}

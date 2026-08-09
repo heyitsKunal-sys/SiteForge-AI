@@ -113,7 +113,7 @@ function truncatePreviousHtml(html, budgetTokens) {
 
 // ─── Parsing + post-processing ────────────────────────────────────────────
 
-const SUMMARY_OPEN = "<<<MINTSITE_SUMMARY>>>";
+const SUMMARY_OPEN = "<<<SITEFORGE_SUMMARY>>>";
 const SUMMARY_CLOSE = "<<<END>>>";
 const GENERATE_SYSTEM = buildGenerateSystem({
   summaryOpen: SUMMARY_OPEN,
@@ -363,12 +363,12 @@ export async function sendOtpEmail({ to, name, code, purpose }) {
   // (signup verification, login OTP, password recovery, etc.).
   const isSignup = purpose === "signup";
   const subject = isSignup
-    ? `Verify your mintsite account — code: ${code}`
-    : `Your mintsite code: ${code}`;
+    ? `Verify your siteforge account — code: ${code}`
+    : `Your siteforge code: ${code}`;
   const intro = isSignup
-    ? "Welcome to mintsite! Use this code to verify your email and finish signing up."
+    ? "Welcome to siteforge! Use this code to verify your email and finish signing up."
     : "Enter this code to sign in. It expires in 10 minutes.";
-  const textContent = `Hi ${name || "there"},\n\n${intro}\n\nYour code: ${code}\n\nThis code expires in 10 minutes.\nIf you didn't request this, you can safely ignore this email.\n\n— mintsite`;
+  const textContent = `Hi ${name || "there"},\n\n${intro}\n\nYour code: ${code}\n\nThis code expires in 10 minutes.\nIf you didn't request this, you can safely ignore this email.\n\n— siteforge`;
   const htmlContent = renderEmailHtml({ name, code, intro });
 
   if (!isEmailConfigured()) {
@@ -378,7 +378,7 @@ export async function sendOtpEmail({ to, name, code, purpose }) {
 
   const payload = {
     sender: {
-      name: process.env.BREVO_SENDER_NAME || "mintsite",
+      name: process.env.BREVO_SENDER_NAME || "siteforge",
       email: process.env.BREVO_SENDER_EMAIL,
     },
     to: [{ email: to, name: name || to }],
@@ -575,11 +575,11 @@ const VERCEL_API = "https://api.vercel.com";
 // Turn a project name into a safe, lowercase URL slug for Vercel.
 function toProjectSlug(name) {
   return (
-    (name || "mintsite-project")
+    (name || "siteforge-project")
       .toLowerCase()
       .replace(/[^a-z0-9-]+/g, "-")
       .replace(/^-+|-+$/g, "")
-      .slice(0, 50) || "mintsite-project"
+      .slice(0, 50) || "siteforge-project"
   );
 }
 
@@ -618,7 +618,7 @@ export async function deployToVercel({ token, projectName, html, prompt }) {
     throw new Error("Project has no HTML to deploy");
   const slug = toProjectSlug(projectName);
 
-  const readme = `# ${projectName || slug}\n\nDeployed via [Mintsite](https://mintsite.app).\n\nOriginal prompt:\n> ${prompt || "(none)"}\n`;
+  const readme = `# ${projectName || slug}\n\nDeployed via [SiteForge](https://siteforge.app).\n\nOriginal prompt:\n> ${prompt || "(none)"}\n`;
 
   // Inline files for the v13 deployments endpoint
   const files = [
@@ -735,8 +735,8 @@ export async function publishToGitHub({
     path: "index.html",
     content: html,
     message: alreadyExisted
-      ? "chore: update site via mintsite"
-      : "feat: initial site from mintsite",
+      ? "chore: update site via siteforge"
+      : "feat: initial site from siteforge",
   });
 
   const readme = renderReadme({ projectName, prompt, owner, repoName });
@@ -820,7 +820,7 @@ function renderReadme({ projectName, prompt, owner, repoName }) {
   const title = projectName || "AI-generated site";
   return `# ${title}
 
-Generated with [mintsite](https://github.com/) — turn a prompt into a website.
+Generated with [siteforge](https://github.com/) — turn a prompt into a website.
 
 ## Original prompt
 
