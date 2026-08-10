@@ -51,8 +51,8 @@ function approxTokens(s) {
 function stripInjectedRuntime(html) {
   if (!html) return html;
   return html
-    .replace(/<script id="__mintsite_link_interceptor__"[\s\S]*?<\/script>/gi, "")
-    .replace(/<style id="__mintsite_fix__"[\s\S]*?<\/style>/gi, "");
+    .replace(/<script id="__siteforge_link_interceptor__"[\s\S]*?<\/script>/gi, "")
+    .replace(/<style id="__siteforge_fix__"[\s\S]*?<\/style>/gi, "");
 }
 
 // Pull the canonical "brand" identity out of previous HTML so we can lock it
@@ -320,7 +320,7 @@ function friendlyError(err) {
 // Env vars when you want real emails:
 //   BREVO_API_KEY        — key from Brevo dashboard → SMTP & API → API Keys (v3)
 //   BREVO_SENDER_EMAIL   — a verified sender on your Brevo account
-//   BREVO_SENDER_NAME    — display name (optional, defaults to "mintsite")
+//   BREVO_SENDER_NAME    — display name (optional, defaults to "siteforge")
 //
 // If anything is missing or Brevo rejects the request, OTPs are logged to the
 // console and (in development) returned in the API response so the flow keeps
@@ -438,7 +438,7 @@ function renderEmailHtml({ name, code, intro }) {
     intro || "Enter this code to sign in. It expires in 10 minutes.";
   return `<!doctype html><html><body style="font-family:Inter,system-ui,sans-serif;background:#f4f4f5;padding:24px;color:#0f172a;margin:0">
   <div style="max-width:480px;margin:0 auto;background:#fff;border-radius:14px;padding:32px;border:1px solid #e2e8f0">
-    <h1 style="margin:0 0 12px;font-size:20px">Your mintsite code</h1>
+    <h1 style="margin:0 0 12px;font-size:20px">Your siteforge code</h1>
     <p style="margin:0 0 20px;color:#475569;font-size:14px">Hi ${escape(name || "there")}, ${escape(lead)}</p>
     <div style="font-size:34px;font-weight:700;letter-spacing:8px;text-align:center;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:18px 0;margin:0 0 20px;color:#0f172a">${code}</div>
     <p style="margin:0;color:#94a3b8;font-size:12px">If you didn't request this, you can safely ignore this email.</p>
@@ -538,7 +538,7 @@ export async function createCheckoutSession({
         price_data: {
           currency: pkg.currency,
           product_data: {
-            name: `${pkg.name} pack — ${pkg.credits} mintsite credits`,
+            name: `${pkg.name} pack — ${pkg.credits} siteforge credits`,
             description: pkg.tagline,
           },
           unit_amount: pkg.amount,
@@ -719,7 +719,7 @@ export async function publishToGitHub({
         name: repoName,
         private: isPrivate,
         auto_init: true,
-        description: `Built with mintsite — ${projectName || "AI-generated website"}`,
+        description: `Built with siteforge — ${projectName || "AI-generated website"}`,
       })
     ).data;
   }
@@ -837,6 +837,6 @@ This repo is set up for **GitHub Pages**. Once Pages is enabled in the repo
 settings, your site will be live at \`https://${owner}.github.io/${repoName}/\`.
 
 ---
-_Edit the prompt in mintsite to regenerate, then upload again to push the changes here._
+_Edit the prompt in siteforge to regenerate, then upload again to push the changes here._
 `;
 }

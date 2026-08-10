@@ -100,7 +100,7 @@ function brandName(p) {
         .join(" ")
         .replace(/[^a-zA-Z0-9\s]/g, "")
         .trim();
-    return (t || "Mintsite Studio").slice(0, 32);
+    return (t || "Siteforge Studio").slice(0, 32);
 }
 
 // Returns a fitting tagline based on keywords in the prompt.
@@ -790,7 +790,7 @@ ${pagesFor({ type, brand, sub, imgKw, products })}
     <div><h4>Account</h4><ul><li><a href="#signup">Create account</a></li><li><a href="#signin">Sign in</a></li><li><a href="#contact">Help</a></li></ul></div>
     <div><h4>Connect</h4><ul><li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a></li><li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li><li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></li></ul></div>
   </div>
-  <div class="foot-bottom"><span>© ${new Date().getFullYear()} ${brand}. All rights reserved.</span><span>Built with Mintsite · ${c.name} edition</span></div>
+  <div class="foot-bottom"><span>© ${new Date().getFullYear()} ${brand}. All rights reserved.</span><span>Built with Siteforge · ${c.name} edition</span></div>
 </footer>
 
 </body></html>`;

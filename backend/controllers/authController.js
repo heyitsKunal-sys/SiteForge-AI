@@ -4,9 +4,10 @@ import { generateOtp, saveOtp, sendOtpEmail, verifyOtp } from '../utils/services
 import { signToken } from "../middleware/auth.js";
 
 
+
 // issue an otp and sent it to the email:
 async function issueAndSend(email, name, status, res, code = 201) {
-    const opt = generateOtp();
+    const otp = generateOtp();
     saveOtp(email, otp);
     await sendOtpEmail({ to: email, name, code: otp, purpose: status });
     return res.status(code).json({ ok: true, email })
@@ -75,7 +76,7 @@ export async function verifyRegister(req, res, next) {
 
         user.emailVerified = true;
         await user.save();
-        res.josn({ ok: true });
+        res.json({ ok: true });
 
     } catch (err) {
         next(err);
@@ -108,14 +109,19 @@ export async function resendRegister(req, res, next) {
 
 export async function login(req, res, next) {
     try {
+
         const { email, password } = req.body;
+
         if (!email || !password)
             return res.status(400).json({ error: "Email and Password are required" });
         const user = await User.findOne({ email }); //find user using email
+
         if (!user)
             return res.status(401).json({ error: " Invalid Credentials." });
         const ok = await user.verifyPassword(password);
         if (!ok) return res.status(401).json({ error: "Invalid Credentials" });
+
+
 
         if (!user.emailVerified) {
             return res.status(403).json({
@@ -123,11 +129,13 @@ export async function login(req, res, next) {
                 needsVerification: true,
                 email: user.email
             });
-            // to generate token
-            const token = signToken(user._id.toString());
-            res.json({ token, user: user.toClient() }); //get suer details excluding the password
-
         }
+        // to generate token
+        const token = signToken(user._id.toString());
+        console.log(token)
+        res.json({ token, user: user.toClient() }); //get suer details excluding the password
+
+
     } catch (err) {
         next(err);
     }

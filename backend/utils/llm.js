@@ -579,10 +579,10 @@ function ensureSmoothScroll(html) {
 // while reading the JS source.
 const SCRIPT_CLOSE = "<" + "/script>";
 const LINK_INTERCEPTOR =
-  '<script id="__mintsite_link_interceptor__">' +
+  '<script id="__siteforge_link_interceptor__">' +
   "(function(){" +
-  "if(window.__mintsiteLinkInterceptor)return;" +
-  "window.__mintsiteLinkInterceptor=true;" +
+  "if(window.__siteforgeLinkInterceptor)return;" +
+  "window.__siteforgeLinkInterceptor=true;" +
   "function showPage(name){" +
   "  var pages=document.querySelectorAll('[data-page]');" +
   "  if(pages.length<2)return false;" +
@@ -615,7 +615,7 @@ const LINK_INTERCEPTOR =
 
 // Bakes the small link/router script into the saved HTML so downloaded files still work.
 function injectLinkInterceptor(html) {
-  if (!html || /__mintsite_link_interceptor__/.test(html)) return html;
+  if (!html || /__siteforge_link_interceptor__/.test(html)) return html;
   // Ensure the document is properly closed FIRST. Truncated AI output (missing
   // </body>/</html>) would otherwise let the injected <script> leak into the
   // page as visible text inside a dangling tag.
@@ -630,7 +630,7 @@ function injectLinkInterceptor(html) {
 }
 
 const OVERLAP_FIX_CSS = `
-/* ── mintsite auto-fix: prevent overlapping + force responsiveness ── */
+/* ── siteforge auto-fix: prevent overlapping + force responsiveness ── */
 *, *::before, *::after { box-sizing:border-box; }
 html, body { max-width:100% !important; overflow-x:hidden !important; margin:0 !important; padding-left:0 !important; padding-right:0 !important; }
 body { position:relative; }
@@ -892,8 +892,8 @@ function fixOverlappingCSS(html) {
   // Marked + deduped so it can be stripped before re-feeding to the model and
   // never injected twice. Placed just before </head> so it comes after the
   // AI's own <style> (its !important rules win regardless).
-  if (/__mintsite_fix__/.test(html)) return html;
-  const block = `<style id="__mintsite_fix__">${OVERLAP_FIX_CSS}</style>`;
+  if (/__siteforge_fix__/.test(html)) return html;
+  const block = `<style id="__siteforge_fix__">${OVERLAP_FIX_CSS}</style>`;
   if (/<\/head>/i.test(html)) {
     return html.replace(/<\/head>/i, block + "\n</head>");
   }
@@ -910,7 +910,7 @@ function fixOverlappingCSS(html) {
 function stripAiPageRouterScripts(html) {
   if (!html) return html;
   return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gi, (full, body) => {
-    if (/__mintsite/.test(full)) return full; // never touch our own
+    if (/__siteforge/.test(full)) return full; // never touch our own
     if (/(data-page|page-route)/.test(body) && /hidden/.test(body)) return "";
     return full;
   });
