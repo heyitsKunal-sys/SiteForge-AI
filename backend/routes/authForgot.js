@@ -44,4 +44,6 @@ router.post('/verify-code', async (req, res, next) => {
     } catch (err) {
         next(err)
     }
-})
+});
+
+// to change the password for a particular email
