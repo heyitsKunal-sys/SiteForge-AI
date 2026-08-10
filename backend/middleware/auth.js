@@ -15,7 +15,7 @@ export function signToken(userId) {
 // check whether user is logged in or not:
 export async function requireAuth(req, res, next) {
     try {
-        const header = req.header.authorization || "",
+        const header = req.header.authorization || "";
         const token = header.startsWith("Bearer") ? header.slice(7) : null;
         if (!token) return res.status(4001).json({ error: "Missing token" });
         const payload = jwt.verify(token, process.env.JWT_SECRET);
