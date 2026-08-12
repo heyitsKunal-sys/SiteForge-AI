@@ -26,8 +26,8 @@ export function Card({ children, className, hover = false, ...props }) {
 export function Logo({ to = "/", className }) {
   return (
     <Link to={to} className={`${s.logoLink} ${className || ""}`}>
-      <img src={logo} alt="mintsite" className={s.logoImg} />
-      <span className={s.logoSpan}> SiteForge-AI</span>
+      <img src={logo} alt="siteforge" className={s.logoImg} />
+      {/* <span className={s.logoSpan}> SiteForge-AI</span> */}
     </Link>
   );
 }

@@ -1283,8 +1283,8 @@ export const sharedUiStyles = {
 
   // ─── Logo ──────────────────────────────────────────────────
   logoLink: "flex items-center gap-2 group",
-  logoImg: "w-5 h-5",
-  logoSpan: "text-[15px] font-semibold tracking-tight text-white",
+  logoImg: "w-50 h-50 ",
+  // logoSpan: "text-[15px] font-bold tracking-tight text-white",
 
   // ─── Input ─────────────────────────────────────────────────
   inputLabel: "block text-[13px] font-medium text-white/85 mb-1.5",
