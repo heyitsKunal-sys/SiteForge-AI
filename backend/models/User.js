@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
 });
 
 
-// return only user non-sensitive info taht the frontend needs , instead of 
+// return only user non-sensitive info that the frontend needs , instead of 
 // revealing the complete datbase record
 userSchema.methods.toClient = function(){ //this function says take the user from the db and create a new , safe version of user that see only info frontend require
     return{

@@ -48,7 +48,7 @@ export async function create(req, res, next) {
         if (prompt.length > 2000)
             return res.status(400).json({ error: "Prompt is too long (max 200 character)" })
         const project = await Project.create({
-            user = req.user._id,
+            user : req.user._id,
             name: name || prompt.split(/[.!?]/)[0].slice(0, 60) || "Untitled Project",
             prompt,
             messages: [{ role: "user", text: prompt }]

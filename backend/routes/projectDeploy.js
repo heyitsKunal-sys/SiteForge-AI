@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { publishToGitHub } from '../utils/services.js'
+import { publishToGitHub , deployToVercel } from '../utils/services.js'
 
 const router = Router({ mergeParams: true });
 
@@ -100,7 +100,7 @@ export function vercelRoute(loadOwnedProject) {
             project.deployedAt = new Date();
             await project.save();
             res.json({
-                url: result.url,
+                url: result.url,   //vercel url
                 deploymentId: result.deploymentId,
                 readyState: result.readyState,
             });

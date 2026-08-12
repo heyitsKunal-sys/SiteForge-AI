@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import { connectDb } from './config/db.js';
 import authRouter from './routes/authRoutes.js';
+import projectRouter from './routes/projectRoutes.js';
 
 const PORT = 4000;
 const app = express();
@@ -17,6 +18,7 @@ connectDb();
 
 // Routes
 app.use('/api/auth' , authRouter);
+app.use('api/projects' , projectRouter);
 
 
 app.get('/', (req,res)=>{
