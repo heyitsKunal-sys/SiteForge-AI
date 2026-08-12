@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 
 export function signToken(userId) {
     const secret = process.env.JWT_SECRET;
-    
+
     if (!secret) throw new Error("JWT_SECRET is not set.");
     return jwt.sign({ sub: userId }, secret, {
         expiresIn: process.env.JWT_EXPIRES_IN || "30d"
@@ -26,7 +26,26 @@ export async function requireAuth(req, res, next) {
         req.user = user;
         next();
     } catch {
-        // invalid token and ignore the error occured
+        return res.status(401).json({ error: "Invalid or Expired Token" })
+    }
+}
+
+// if token found attach the token else make it anonymous
+
+export async function optionalAuth(req, res, next) {
+    try {
+        const header = req.headers.authorization || "";
+        const token = header.startsWith("Bearer") ? header.slice(7) : null;
+        if (token) {
+            const payload = jwt.verify(token, process.env.JWT_SECRET);
+            const user = await User.findById(payload.sub);
+            if (user) req.user = user;
+
+        }
+
+    } catch (err) {
+        //   invalid token and ignore the error occured
     }
     next()
+
 }

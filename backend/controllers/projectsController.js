@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Project } from "../models/Project.js";
-import { enhancePrompt, generateSite } from "../utils/services.js";
+import { enhancePrompt, generateSite , postProcess } from "../utils/services.js";
 
 // to check the string is a valid mongoDb id:
 function isValidId(id) {
@@ -46,7 +46,7 @@ export async function create(req, res, next) {
         const name = (req.body.name || "").trim();
         if (!prompt) return res.status(400).json({ error: "Prompt is required" });
         if (prompt.length > 2000)
-            return res.status(400).json({ error: "Prompt is too long (max 200 character)" })
+            return res.status(400).json({ error: "Prompt is too long (max 2000 character)" })
         const project = await Project.create({
             user : req.user._id,
             name: name || prompt.split(/[.!?]/)[0].slice(0, 60) || "Untitled Project",
@@ -81,7 +81,7 @@ export async function update(req, res, next) {
         if (req.body.name !== undefined) {
             const name = String(req.body.name).trim();
             if (!name || name.length > 80)
-                return res.status(400).json({ error: "Nmae must be 2-80 character" })
+                return res.status(400).json({ error: "Nmae must be 1-80 character" })
             project.name = name;
         }
         if (req.body.html !== undefined) {
@@ -128,8 +128,8 @@ function visibleText(html) {
     return html
         .replace(/<script[\s\S]*? <\/script>/gi, "")  //.replace()  removes J.S from html because script code is not visible to user
         .replace(/<style[\s\S]*? <\/style>/gi, "") // here style content is removed no css is shown
-        .replace(/<[^>]+>/g, "") //removes html tag  suppose we have <div> hello kunal</div> it removes div and only shows hello kunal
-        .replace(/\s+/g, "") //collapse multiple spaces : kunal    is  a           ... it becomes kunal is a (mtlv ek line ya ek space me le ata ha)
+        .replace(/<[^>]+>/g, " ") //removes html tag  suppose we have <div> hello kunal</div> it removes div and only shows hello kunal
+        .replace(/\s+/g, " ") //collapse multiple spaces : kunal    is  a           ... it becomes kunal is a (mtlv ek line ya ek space me le ata ha)
         .trim(); //remove spaces from beginning to enf
 
 }
