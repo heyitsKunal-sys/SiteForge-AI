@@ -1181,7 +1181,7 @@ export const navbarStyles = {
 
   // ─── Primary button (reusable) ─────────────────────────
   btnPrimary:
-    "inline-flex items-center justify-center gap-1.5 rounded-lg text-zinc-950 font-bold tracking-tight bg-linear-to-br from-rose-500 via-orange-500 to-amber-400 shadow-[0_10px_30px_-8px_rgba(255,138,76,0.55),inset_0_1px_0_rgba(255,255,255,0.4)] hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 transition",
+    "inline-flex items-center justify-center gap-1.5 rounded-lg text-zinc-950 font-bold tracking-tight bg-linear-to-br from-rose-500 via-purple-500 to-amber-400 shadow-[0_10px_30px_-8px_rgba(255,138,76,0.55),inset_0_1px_0_rgba(255,255,255,0.4)] hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 transition",
 
   // ─── Hamburger button ──────────────────────────────────
   hamburger: "md:hidden p-2 text-white/70 hover:text-white",

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { getMe } from "../utils/api.js";
 
 
@@ -54,10 +54,22 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={
-            user, loading, loginUser, logoutUser, updateUser, setUser
-        }>
+            {
+                user,
+                loading,
+                loginUser,
+                logoutUser,
+                updateUser,
+                setUser,
+            }
+        }
+
+        
+        >
             {children}
         </AuthContext.Provider>
     );
 
 };
+
+export const useAuth = () => useContext(AuthContext)
