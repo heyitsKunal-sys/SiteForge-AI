@@ -28,17 +28,15 @@ export async function register(req, res, next) {
                 error: " Name must be atleast of 2 character"
 
             })
-        if (password < 6)
+        if (password.length < 6)
             return res.status(400).json({
                 error: "Password length must be atleast of 6 character"
             })
         const existing = await User.findOne({ email });
         if (existing) {
-            return res.status(400).json
-                ({
-                    error: "Email already in use"
-                });
-            return issueAndSend(email, existing.name, "signup", res, 200);
+            return res.status(400).json({
+                error: "Email already in use"
+            });
         }
 
         const user = await User.create({
@@ -90,7 +88,7 @@ export async function verifyRegister(req, res, next) {
 export async function resendRegister(req, res, next) {
     try {
         const email = (req.body.email || "").trim().toLowerCase();
-        if (!email) return res.stauts(400).json({ error: " email is required." });
+        if (!email) return res.status(400).json({ error: " email is required." });
 
         const user = await User.findOne({ email }); //find user using email
         if (!user)
@@ -154,7 +152,7 @@ export async function contributions(req, res, next) {
         oneYearAgo.setUTCHours(0, 0, 0, 0);
         oneYearAgo.setUTCDate(oneYearAgo.getUTCDate() - 364);
 
-        const projects = await Project.file({
+        const projects = await Project.find({
             user: req.user._id,
             "messages.createdAt": { $gte: oneYearAgo },
         }).select("messages")
@@ -204,7 +202,7 @@ export async function updateProfile(req, res, next) {
 export async function changePassword(req, res, next) {
     try {
         const { current, nextPw } = req.body;
-        if (!current || nextPw.length < 6)
+        if (!current || !nextPw || nextPw.length < 6)
             return res.status(400).json({ error: "New Password must be atleast 6 charcter" });
 
         const ok = await req.user.verifyPassword(current);

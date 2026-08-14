@@ -11,7 +11,7 @@ export async function list(req, res, next) {
             views: { publishedAt: -1, views: -1 },
             likes: { likes: -1, publishedAt: -1 },
         }
-        const items = await Project.find({ publised: true })
+        const items = await Project.find({ published: true })
             .select("+likedBy")
             .sort(sortMap[sort] || sortMap.new)
             .limit(60)
@@ -40,7 +40,7 @@ export async function get(req, res, next) {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) //suppose your API url is"  GET/projects/64abc123...... The :id part is avaialble as req.params.id            req.params.id: means give me the ID that came from the URL. then mongoose.Types.ObjectId.isValid(..) checks does this look like a valid MOngoDB objectId?
             return res.status(400).json({ error: "INvalid ID" })
         const project = await Project.findById(req.params.id) //MongoDB ,find the project whose _id equals the ID from the url 
-            .select("+viewedBy + likedBy")
+            .select("+viewedBy +likedBy")
             .populate("user", "name")
 
         if (!project || !project.published)
@@ -66,7 +66,7 @@ export async function get(req, res, next) {
             )
             project.views += 1   //this updates the JS object in the memory beacuse mongodb object is updated by $inc: {} but the project variable still contains the old value
         }
-        const likedByMe = Bollean(
+        const likedByMe = Boolean(
             meId && (project.likedBy || []).some((id) => id.toString() === meId)
         );
         res.json({

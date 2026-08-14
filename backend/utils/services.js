@@ -16,6 +16,7 @@ import { Octokit } from "@octokit/rest";
 // ═══════════ AI GENERATION ═══════════
 
 export { postProcess }; // re-export so existing callers keep working
+export { generateMockSite }; // re-export so existing callers keep working
 
 // Conservative token estimate: ~4 chars/token. We size INPUT so it fits the
 // strictest provider (Groq, 12K TPM). For OUTPUT, we ask for the IDEAL budget

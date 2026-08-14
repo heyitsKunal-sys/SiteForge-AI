@@ -16,7 +16,7 @@ authRouter.get('/me/contributions' , requireAuth , contributions);
 
 
 authRouter.patch('/me', requireAuth , updateProfile);
-authRouter.patch('/me/passsword', requireAuth , changePassword);
+authRouter.patch('/me/password', requireAuth , changePassword);
 authRouter.delete('/me', requireAuth, deleteAccount);
 
 // for forgot password and reset it:

@@ -3,13 +3,13 @@ import axios from 'axios'
 // to use the backend url
 
 const API = axios.create({
-    baseURL: "http://localhost:4000/api",
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000/api",
     headers: { "Content-Type": "application/json" },
 });
 
 // to pass the token if user is logged-in
 API.interceptors.request.use((config) => {
-    const token = localStorage.getItem("item");
+    const token = localStorage.getItem("token");
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config
 });
@@ -86,5 +86,6 @@ export const createCheckoutSession = (packageId) =>
     body(API.post("/payments/create-checkout-session", { packageId }));
 export const verifySession = (sessionId) =>
     body(API.post("/payments/verify-session", { sessionId }));
+export const getPaymentHistory = () => body(API.get("/payments/history"));
 
 export default API;

@@ -65,8 +65,8 @@ export async function createSession(req, res, next) {
         const { id, url } = await createCheckoutSession({
             pkg,
             user: req.user,
-            successUrl: `${origin}/pricing?session_id ={CHECKOUT_SESSION_ID}`,
-            cancelUrl: `${origin}/pricing?cancelled = 1`
+            successUrl: `${origin}/pricing?session_id={CHECKOUT_SESSION_ID}`,
+            cancelUrl: `${origin}/pricing?cancelled=1`
         });
         await Payment.create({
             user: req.user._id,

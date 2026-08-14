@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Project } from "../models/Project.js";
-import { enhancePrompt, generateSite , postProcess } from "../utils/services.js";
+import { enhancePrompt, generateSite , postProcess, generateMockSite } from "../utils/services.js";
 
 // to check the string is a valid mongoDb id:
 function isValidId(id) {
@@ -138,7 +138,7 @@ function visibleText(html) {
 
 export async function generate(req, res, next) {
     try {
-        const project = await loadOwnedProject(req, res);
+        const project = await loadOwnedProjects(req, res);
         if (!project) return;
 
         const isFirstGeneration = !project.html || project.html.length < 100;

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { User } from "../models/User.js";
-import { generateOtp, peekOtp, sendOtpEmail, verifyOtp } from "../utils/services.js";
+import { generateOtp, peekOtp, saveOtp, sendOtpEmail, verifyOtp } from "../utils/services.js";
 
 
 const router = Router();
@@ -36,7 +36,7 @@ router.post('/verify-code', async (req, res, next) => {
 
         const result = peekOtp(email, code);
         if (!result.ok)
-            return res.status(400).json({ error: " result.reason" });
+            return res.status(400).json({ error: result.reason });
         res.json({ ok: true });
 
 
@@ -53,7 +53,7 @@ router.post('/reset', async (req, res, next) => {
         if (!email || !code)
             return res.status(400).json({ error: "email and code are required" })
 
-        if (newPassword.length < 6)
+        if (!newPassword || newPassword.length < 6)
             return res.status(400).json({ error: "New password should be of 6 characters" });
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ error: "No account found with that email" });
