@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { navbarStyles as s } from '../assets/dummyStyles'
 import { Logo } from '../assets/ui'
 import { Zap, Settings } from 'lucide-react'
+import { useState } from 'react';
 
 const links = [
     { label: "Home", to: "/" },
@@ -15,6 +16,8 @@ const accountLinks = [
 ];
 const Navbar = () => {
     const navigate  = useNavigate()
+    const [open , setOpen] =useState(false);
+    const visibleLinks = links.filter((l)=> !l.protected || isAuthed)
     return (
         <nav className={s.root}>
             <div className={s.container}>
